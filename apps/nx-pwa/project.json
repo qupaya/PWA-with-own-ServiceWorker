@@ -8,12 +8,16 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/nx-pwa",
         "index": "apps/nx-pwa/src/index.html",
         "browser": "apps/nx-pwa/src/main.ts",
-        "polyfills": ["zone.js"],
+        "polyfills": [
+          "zone.js"
+        ],
         "tsConfig": "apps/nx-pwa/tsconfig.app.json",
         "assets": [
           {
@@ -21,7 +25,9 @@
             "input": "apps/nx-pwa/public"
           }
         ],
-        "styles": ["apps/nx-pwa/src/styles.css"],
+        "styles": [
+          "apps/nx-pwa/src/styles.css"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -38,7 +44,8 @@
               "maximumError": "4kb"
             }
           ],
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "serviceWorker": "apps/nx-pwa/ngsw-config.json"
         },
         "development": {
           "optimization": false,
@@ -47,6 +54,21 @@
         }
       },
       "defaultConfiguration": "production"
+    },
+    "copy-service-worker": {
+      "command": "cp dist/libs/service-worker/service-worker.js dist/apps/nx-pwa/browser/service-worker.js",
+      "dependsOn": [
+        "build",
+        "service-worker:build"
+      ]
+    },
+    "serve-pwa": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "nx-pwa:copy-service-worker",
+        "staticFilePath": "dist/apps/nx-pwa/browser",
+        "spa": true
+      }
     },
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
@@ -71,7 +93,9 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
       "options": {
         "jestConfig": "apps/nx-pwa/jest.config.ts"
       }
